@@ -1,0 +1,17 @@
+find_package(GMock)
+
+include_gmock()
+include_directories(${GMOCK_INCLUDE_DIRS})
+set (TESTS_EXECUTABLE tests)
+aux_source_directory(. TEST_SRC)
+add_executable(${TESTS_EXECUTABLE} ${TEST_SRC})
+
+if(UNIX)
+    target_link_libraries(${TESTS_EXECUTABLE} ${GMOCK_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${PROJECT_NAME} rt m)
+elseif(WIN32)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        target_link_libraries(${TESTS_EXECUTABLE} kernel32 ${GMOCK_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${PROJECT_NAME} )
+    else(CMAKE_COMPILER_IS_GNUCXX)
+        target_link_libraries(${TESTS_EXECUTABLE} ${GMOCK_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${PROJECT_NAME} )
+    endif(CMAKE_COMPILER_IS_GNUCXX)
+endif(UNIX)
